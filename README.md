@@ -49,13 +49,19 @@ No painel do projeto, abra o **SQL Editor** e rode o conteúdo de
 
 ```bash
 cd backend
-cp .env.example .env     # preencha SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY
+cp .env.example .env     # preencha SUPABASE_URL e SUPABASE_SECRET_KEY
 npm install
 npm run dev              # http://localhost:3333
 ```
 
-As chaves ficam em `Project Settings > API Keys` no painel do Supabase. A
-`service_role` ignora RLS — ela vive apenas no backend e nunca no navegador.
+As chaves ficam em `Project Settings > API Keys` no painel do Supabase. Use a
+chave **secreta** (`sb_secret_...`): ela ignora RLS, então vive apenas no backend
+e nunca no navegador. Projetos criados antes da nova nomenclatura podem usar
+`SUPABASE_SERVICE_ROLE_KEY` — o backend aceita os dois nomes.
+
+A chave publicável (`sb_publishable_...`) e a URL de JWKS não são usadas aqui: o
+frontend nunca fala com o Supabase direto e o projeto não tem autenticação de
+usuário. Toda escrita passa pelo Express.
 
 ### 3. Frontend
 
