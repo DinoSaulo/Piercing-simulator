@@ -26,6 +26,21 @@ function buildObjectPath(mimetype) {
   return `${year}/${month}/${randomUUID()}.${extension}`
 }
 
+/**
+ * Remove um objeto ja enviado.
+ *
+ * Usado para desfazer o upload quando o insert seguinte falha. A falha da
+ * remocao e so registrada: quem chama esta tratando um erro anterior, e
+ * sobrepor esse erro por causa da limpeza esconderia a causa real.
+ */
+export async function removeImage(objectPath) {
+  const { error } = await supabase.storage.from(config.storageBucket).remove([objectPath])
+
+  if (error) {
+    console.error(`[storage] orfao em ${config.storageBucket}/${objectPath}: ${error.message}`)
+  }
+}
+
 export async function uploadImage(file) {
   const objectPath = buildObjectPath(file.mimetype)
 

@@ -21,8 +21,9 @@ supabase/   schema.sql — tabela, RLS e bucket de storage
 1. **Portão de idade** — modal bloqueia o conteúdo. "Não" redireciona para o
    Google; "Sim" libera a página.
 2. **Formulário** — gênero, parte do corpo (ambos com input de texto que entra e
-   sai em fade quando "Outro" é escolhido), 6 estilos de piercing ilustrados em
-   SVG inline, upload de foto (arquivo ou câmera) e aceite de armazenamento.
+   sai em fade quando "Outro" é escolhido), estilos de piercing ilustrados em SVG
+   inline e filtrados pela parte do corpo, upload de foto (arquivo ou câmera) e
+   aceite de armazenamento.
 3. **Modal de carregamento** — barra de progresso de 4 segundos. Em paralelo, o
    payload é enviado para `POST /api/simulate`, que grava a imagem no Supabase
    Storage e os metadados na tabela `simulations`.
@@ -44,6 +45,11 @@ No painel do projeto, abra o **SQL Editor** e rode o conteúdo de
 - a tabela `public.simulations` com os CHECK constraints dos selects;
 - RLS habilitado sem policies, fechando a tabela para as chaves públicas;
 - o bucket privado `simulations`, limitado a 10 MB e a tipos de imagem.
+
+**Projeto que já rodou uma versão anterior do schema:** `create table if not
+exists` não altera tabela existente, então rode também os arquivos de
+[`supabase/migrations/`](supabase/migrations) em ordem. Leia o cabeçalho de cada
+um antes — a migração `0001` remove linhas gravadas com os estilos antigos.
 
 ### 2. Backend
 
@@ -75,6 +81,29 @@ O dev server do Vite encaminha `/api/*` para `http://localhost:3333`, então nã
 há CORS nem URL absoluta no código. Para apontar para outro backend, defina
 `VITE_API_PROXY_TARGET` (veja `frontend/.env.example`).
 
+## Catálogo de estilos
+
+A lista de estilos exibida depende da parte do corpo escolhida. Sem parte
+selecionada — ou com "Outro", que não tem lista própria — a tela mostra o
+catálogo inteiro.
+
+| Parte do corpo      | Estilos (`id`)                                                            |
+| ------------------- | ------------------------------------------------------------------------- |
+| Glande              | `prince-albert`, `prince-albert-reverso`, `apadravya`, `ampallang`, `dydoe` |
+| Mamilo / Mamilos    | `mamilo-padrao`, `areola`                                                 |
+| Clítoris            | `vch`, `hch`, `triangle`, `isabella`                                      |
+| Ânus                | `anal`                                                                    |
+| Outro / não escolhida | todos os acima                                                          |
+
+"Clítoris" exibe, acima dos botões, um aviso sobre o risco de perfurar a glande
+clitoriana diretamente.
+
+O mapeamento vive em três lugares que precisam andar juntos:
+[`frontend/src/data/piercingStyles.js`](frontend/src/data/piercingStyles.js) (com
+títulos, descrições e SVGs), [`backend/src/lib/validation.js`](backend/src/lib/validation.js)
+e os CHECK constraints em [`supabase/schema.sql`](supabase/schema.sql). Os três
+recusam combinações inválidas, como `bodyPart=Ânus` com `style=apadravya`.
+
 ## API
 
 ### `POST /api/simulate`
@@ -87,7 +116,7 @@ há CORS nem URL absoluta no código. Para apontar para outro backend, defina
 | `genderOther`    | se `gender=Outro`    | texto livre, até 80 caracteres                    |
 | `bodyPart`       | sim                  | um dos valores do select de parte do corpo        |
 | `bodyPartOther`  | se `bodyPart=Outro`  | texto livre, até 80 caracteres                    |
-| `style`          | sim                  | id do estilo (`argola-classica`, `halter-reto`, …) |
+| `style`          | sim                  | id do estilo, válido para a `bodyPart` enviada     |
 | `consent`        | sim                  | `"true"`                                          |
 | `image`          | sim                  | arquivo de imagem, até 10 MB                      |
 

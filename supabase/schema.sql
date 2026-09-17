@@ -15,18 +15,28 @@ create table if not exists public.simulations (
   gender_other    text check (char_length(gender_other) <= 80),
 
   body_part       text not null check (
-                    body_part in ('Glandis', 'Mamilo', 'Mamilos', 'Clítoris', 'Outro')
+                    body_part in ('Glande', 'Mamilo', 'Mamilos', 'Clítoris', 'Ânus', 'Outro')
                   ),
   body_part_other text check (char_length(body_part_other) <= 80),
 
   piercing_style  text not null check (
                     piercing_style in (
-                      'argola-classica',
-                      'halter-reto',
-                      'halter-curvo',
-                      'captive-bead',
-                      'circular-ferradura',
-                      'espiral-duplo'
+                      -- Glande
+                      'prince-albert',
+                      'prince-albert-reverso',
+                      'apadravya',
+                      'ampallang',
+                      'dydoe',
+                      -- Mamilo / Mamilos
+                      'mamilo-padrao',
+                      'areola',
+                      -- Clítoris
+                      'vch',
+                      'hch',
+                      'triangle',
+                      'isabella',
+                      -- Ânus
+                      'anal'
                     )
                   ),
 
@@ -45,7 +55,22 @@ create table if not exists public.simulations (
   constraint gender_other_required
     check ((gender = 'Outro') = (gender_other is not null)),
   constraint body_part_other_required
-    check ((body_part = 'Outro') = (body_part_other is not null))
+    check ((body_part = 'Outro') = (body_part_other is not null)),
+
+  -- Cada parte do corpo oferece um subconjunto de estilos, e é isso que a tela
+  -- mostra. "Outro" não tem lista própria, então aceita qualquer estilo válido.
+  constraint style_matches_body_part check (
+    case body_part
+      when 'Glande' then piercing_style in (
+        'prince-albert', 'prince-albert-reverso', 'apadravya', 'ampallang', 'dydoe'
+      )
+      when 'Mamilo'   then piercing_style in ('mamilo-padrao', 'areola')
+      when 'Mamilos'  then piercing_style in ('mamilo-padrao', 'areola')
+      when 'Clítoris' then piercing_style in ('vch', 'hch', 'triangle', 'isabella')
+      when 'Ânus'     then piercing_style in ('anal')
+      else true
+    end
+  )
 );
 
 create index if not exists simulations_created_at_idx

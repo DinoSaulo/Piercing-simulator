@@ -4,6 +4,7 @@ import { ImageUploadField } from './ImageUploadField.jsx'
 import { PiercingStylePicker } from './PiercingStylePicker.jsx'
 import { SelectField } from './SelectField.jsx'
 import { BODY_PARTS, GENDERS, OTHER_OPTION } from '../constants.js'
+import { stylesForBodyPart } from '../data/piercingStyles.js'
 
 const EMPTY = {
   gender: '',
@@ -21,6 +22,16 @@ export function SimulationForm({ onSubmit }) {
 
   function update(patch) {
     setValues((current) => ({ ...current, ...patch }))
+  }
+
+  // Trocar a parte do corpo troca a lista de estilos. Se o estilo ja escolhido
+  // nao estiver na lista nova, ele e descartado — senao o formulario enviaria
+  // uma combinacao que a tela nunca mostrou e o backend recusa.
+  function handleBodyPartChange(bodyPart) {
+    setValues((current) => {
+      const stillVisible = stylesForBodyPart(bodyPart).some((style) => style.id === current.style)
+      return { ...current, bodyPart, style: stillVisible ? current.style : '' }
+    })
   }
 
   // Os selects e o checkbox usam `required` nativo; style e image nao tem
@@ -67,7 +78,7 @@ export function SimulationForm({ onSubmit }) {
           label="Parte do corpo"
           options={BODY_PARTS}
           value={values.bodyPart}
-          onChange={(bodyPart) => update({ bodyPart })}
+          onChange={handleBodyPartChange}
           otherValue={values.bodyPartOther}
           onOtherChange={(bodyPartOther) => update({ bodyPartOther })}
           otherLabel="Qual parte?"
@@ -77,6 +88,7 @@ export function SimulationForm({ onSubmit }) {
 
       <div className="space-y-2">
         <PiercingStylePicker
+          bodyPart={values.bodyPart}
           value={values.style}
           onChange={(style) => {
             update({ style })
