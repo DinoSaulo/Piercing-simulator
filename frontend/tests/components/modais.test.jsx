@@ -47,17 +47,39 @@ describe('AgeGateModal', () => {
 })
 
 describe('ConsentNotice', () => {
-  it('diz que a imagem sera enviada e armazenada no servidor', () => {
+  it('mostra o texto curto de aceite dos termos de uso', () => {
     render(<ConsentNotice checked={false} onChange={vi.fn()} />)
 
-    expect(screen.getByText(/será enviada, armazenada no/)).toBeInTheDocument()
+    expect(screen.getByText(/Concordo com os/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'termos de uso' })).toBeInTheDocument()
   })
 
-  it('avisa explicitamente que a administracao ve as fotos', () => {
-    // "armazenada" sozinho nao descreve isso para quem manda uma foto intima.
+  it('abre o modal de termos de uso ao clicar no link, sem marcar o checkbox', async () => {
+    const onChange = vi.fn()
+    render(<ConsentNotice checked={false} onChange={onChange} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'termos de uso' }))
+
+    expect(screen.getByRole('dialog', { name: 'Termos de Uso' })).toBeInTheDocument()
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('fecha o modal de termos pelo X no topo', async () => {
     render(<ConsentNotice checked={false} onChange={vi.fn()} />)
 
-    expect(screen.getByText(/poderá ser vista pela administração do site/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'termos de uso' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Fechar termos de uso' }))
+
+    expect(screen.queryByRole('dialog', { name: 'Termos de Uso' })).not.toBeInTheDocument()
+  })
+
+  it('fecha o modal de termos pelo botao "Fechar" no rodape', async () => {
+    render(<ConsentNotice checked={false} onChange={vi.fn()} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'termos de uso' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Fechar' }))
+
+    expect(screen.queryByRole('dialog', { name: 'Termos de Uso' })).not.toBeInTheDocument()
   })
 
   it('o aceite e obrigatorio e reflete o estado recebido', () => {

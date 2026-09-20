@@ -1,14 +1,9 @@
-/**
- * Aviso de armazenamento + aceite obrigatorio.
- *
- * A imagem sai do dispositivo e fica guardada no servidor; a pessoa precisa
- * saber disso antes de enviar, nao depois.
- *
- * O texto menciona explicitamente que a administracao do site pode ver a foto.
- * Existe um painel em /secret/adm exatamente para isso, e "armazenada" sozinho
- * nao descreve isso para quem esta mandando uma foto intima.
- */
+import { useState } from 'react'
+import { TermsOfUseModal } from './TermsOfUseModal.jsx'
+
 export function ConsentNotice({ checked, onChange }) {
+  const [termsOpen, setTermsOpen] = useState(false)
+
   return (
     <div className="space-y-3 rounded-xl border border-ink-800 bg-ink-900/60 p-4">
       <label className="flex cursor-pointer items-start gap-3 text-sm text-steel-200">
@@ -20,10 +15,19 @@ export function ConsentNotice({ checked, onChange }) {
           className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-accent-500)]"
         />
         <span>
-          Tenho 18 anos ou mais, a imagem é minha e entendo que ela será enviada, armazenada no
-          servidor e poderá ser vista pela administração do site.
+          Concordo com os{' '}
+          <button
+            type="button"
+            onClick={() => setTermsOpen(true)}
+            className="font-medium text-accent-500 underline underline-offset-2 hover:text-accent-400"
+          >
+            termos de uso
+          </button>{' '}
+          do site.
         </span>
       </label>
+
+      <TermsOfUseModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
     </div>
   )
 }
