@@ -1,22 +1,15 @@
 {
-  "builds": [
+  "buildCommand": "cd frontend && npm ci && npm run build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "npm ci --prefix frontend",
+  "rewrites": [
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "frontend/dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "https://yjqmlzqkdtossfxopvtw.supabase.co/functions/v1/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://yjqmlzqkdtossfxopvtw.supabase.co/functions/v1/api/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
