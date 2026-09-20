@@ -3,7 +3,20 @@
     "allow": [
       "Bash(npx --yes deno@2 run --allow-env --allow-net --allow-read --no-check \"C:/Users/saulo/AppData/Local/Temp/claude/c--Users-saulo-projects-Piercing-simulator/bd5f3320-45af-4e16-aa58-cf7111dd457e/scratchpad/smoke.ts\")",
       "Bash(git reset *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+      "Bash(git commit -m 'Configure Vercel deployment for frontend directory *)",
+      "Bash(git commit -m 'Fix Vercel build configuration for Vite in subdirectory *)",
+      "Bash(npx --yes deno@2 test --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/validation_test.ts)",
+      "Bash(npx --yes deno@2 test --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/http_test.ts supabase/functions/_tests/auth_test.ts)",
+      "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/http_test.ts supabase/functions/_tests/auth_test.ts)",
+      "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/storage_test.ts)",
+      "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/handler_test.ts)",
+      "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/routes_simulate_test.ts)",
+      "Bash(cd \"C:/Users/saulo/projects/Piercing-simulator\" && rm -f nul && git add -A && git status)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\saulo\\projects\\Piercing-simulator"
     ]
   }
 }

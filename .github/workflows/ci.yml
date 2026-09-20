@@ -1,0 +1,66 @@
+name: CI
+
+# As duas suites rapidas, em jobs paralelos. Ficam de fora, de proposito:
+#
+#   test:e2e  — precisa do Chromium e de um servidor de pe; roda local
+#   test:live — precisa do stack do Supabase (Docker) e de credenciais
+#
+# Ambas estao documentadas no README e rodam sob demanda.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    name: Frontend (lint + Vitest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci --prefix frontend
+
+      - name: Lint
+        run: npm run lint --prefix frontend
+
+      - name: Testes de unidade, componente e integracao
+        run: npm run test --prefix frontend
+
+  api:
+    name: Edge Function (check + Deno)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Checagem de tipos
+        run: deno check --node-modules-dir=none supabase/functions/api/index.ts
+
+      # Inclui o teste de contrato, que cruza o catalogo de estilos do
+      # frontend, a validacao da API e os CHECK constraints do schema.sql.
+      - name: Testes de unidade, integracao e contrato
+        run: >
+          deno test --node-modules-dir=none --allow-env --allow-read --allow-net
+          --env-file=supabase/functions/_tests/.env.test
+          supabase/functions/_tests/
+          --ignore=supabase/functions/_tests/config_missing_test.ts,supabase/functions/_tests/live_test.ts
+
+      # Invocacao separada: config.ts congela a env no primeiro import, entao
+      # "secret ausente" so da para simular com outro arquivo de ambiente.
+      - name: Teste de funcao mal configurada
+        run: >
+          deno test --node-modules-dir=none --allow-env --allow-read --allow-net
+          --env-file=supabase/functions/_tests/.env.missing
+          supabase/functions/_tests/config_missing_test.ts

@@ -230,9 +230,35 @@ Expira o cookie. O navegador não consegue apagar um cookie `HttpOnly` sozinho.
 Exige o cookie. Devolve as 100 mais recentes com URLs assinadas, e o total real
 da tabela separado — o contador da tela continua certo depois da centésima.
 
+## Testes
+
+```bash
+npm install                 # uma vez, na raiz (Deno e Playwright)
+npm install --prefix frontend
+
+npm test                    # backend + contrato + frontend, offline, ~15s
+```
+
+| Comando | O que cobre |
+| --- | --- |
+| `npm run test:api` | Edge Function: unidade, integração e o contrato entre as três fontes de verdade |
+| `npm run test:web` | Frontend: unidade, componentes e os dois fluxos completos |
+| `npm run test:e2e` | Chromium de verdade, com a API interceptada |
+| `npm run test:live` | Contra o stack do Supabase rodando (exige Docker) |
+
+O teste de contrato é o que segura a duplicação avisada em
+[Catálogo de estilos](#catálogo-de-estilos): ele cruza
+`piercingStyles.js`, `validation.ts` e os CHECK de `schema.sql`, e quebra o CI
+se os três divergirem.
+
+Detalhes de cada suíte, incluindo os pré-requisitos do E2E e da suíte live:
+[`docs/TESTES.md`](docs/TESTES.md).
+
 ## Verificação
 
 ```bash
-cd frontend && npm run lint && npm run build
-npx deno check supabase/functions/api/index.ts
+npm run lint
+npm run build
+npm run test:api:check      # deno check da Edge Function
+npm test
 ```

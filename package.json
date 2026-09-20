@@ -4,6 +4,20 @@
   "scripts": {
     "build": "cd frontend && npm run build",
     "preview": "cd frontend && npm run preview",
-    "dev": "cd frontend && npm run dev"
+    "dev": "cd frontend && npm run dev",
+    "lint": "npm run lint --prefix frontend",
+    "test": "npm run test:api && npm run test:web",
+    "test:api": "npm run test:api:principal && npm run test:api:config",
+    "test:api:principal": "deno test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/ --ignore=supabase/functions/_tests/config_missing_test.ts,supabase/functions/_tests/live_test.ts",
+    "test:api:config": "deno test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.missing supabase/functions/_tests/config_missing_test.ts",
+    "test:api:check": "deno check --node-modules-dir=none supabase/functions/api/index.ts",
+    "test:web": "npm run test --prefix frontend",
+    "test:web:watch": "npm run test:watch --prefix frontend",
+    "test:e2e": "playwright test",
+    "test:live": "deno test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/.env --env-file=supabase/functions/_tests/.env.live supabase/functions/_tests/live_test.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.1",
+    "deno": "^2.9.6"
   }
 }

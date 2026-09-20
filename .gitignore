@@ -70,6 +70,12 @@ web_modules/
 .env.*
 !.env.example
 
+# Ambiente das suites automatizadas: valores falsos, e sem eles os testes nao
+# rodam (config.ts le a env no import). Precisam ser versionados.
+!supabase/functions/_tests/.env.test
+!supabase/functions/_tests/.env.missing
+!supabase/functions/_tests/.env.live
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -151,3 +157,9 @@ skills-lock.json
 # Supabase CLI (o link do projeto e o estado local do `supabase start`)
 supabase/.temp/
 supabase/.branches/
+
+# Testes
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
