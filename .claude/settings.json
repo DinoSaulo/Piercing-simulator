@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --yes deno@2 run --allow-env --allow-net --allow-read --no-check \"C:/Users/saulo/AppData/Local/Temp/claude/c--Users-saulo-projects-Piercing-simulator/bd5f3320-45af-4e16-aa58-cf7111dd457e/scratchpad/smoke.ts\")",
+      "Bash(git reset *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
