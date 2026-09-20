@@ -8,12 +8,17 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss()],
     server: {
-      // O front chama sempre "/api/...". Em dev o Vite encaminha para o Express,
-      // entao nao existe CORS nem URL absoluta espalhada pelo codigo.
+      // O front chama sempre "/api/...", nunca uma URL absoluta. Em dev quem
+      // encaminha e este proxy; em producao, o rewrite do vercel.json. Nos dois
+      // casos o browser enxerga mesma origem: sem CORS e com o cookie do painel
+      // valendo como first-party.
       proxy: {
         '/api': {
-          target: env.VITE_API_PROXY_TARGET || 'http://localhost:3333',
+          target: env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:54321',
           changeOrigin: true,
+          // O Supabase publica Edge Functions sob /functions/v1/<nome>. A funcao
+          // se chama "api", entao /api/simulate vira /functions/v1/api/simulate.
+          rewrite: (path) => `/functions/v1${path}`,
         },
       },
     },

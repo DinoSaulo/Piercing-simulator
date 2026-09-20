@@ -125,3 +125,17 @@ export function stylesForBodyPart(bodyPart) {
 export function noticeForBodyPart(bodyPart) {
   return groupFor(bodyPart)?.notice ?? null
 }
+
+const LABEL_BY_ID = new Map(PIERCING_STYLES.map((style) => [style.id, style.label]))
+
+/**
+ * Nome legivel a partir do id gravado no banco.
+ *
+ * O painel administrativo le `piercing_style` cru do Postgres ("prince-albert")
+ * e precisa mostrar o mesmo rotulo que o formulario mostrou. Ids desconhecidos
+ * — linhas de versoes antigas do catalogo — aparecem como estao, em vez de
+ * sumirem da tela.
+ */
+export function labelForStyle(styleId) {
+  return LABEL_BY_ID.get(styleId) ?? styleId
+}

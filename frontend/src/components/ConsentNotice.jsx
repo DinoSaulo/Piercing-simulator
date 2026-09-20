@@ -3,6 +3,10 @@
  *
  * A imagem sai do dispositivo e fica guardada no servidor; a pessoa precisa
  * saber disso antes de enviar, nao depois.
+ *
+ * O texto menciona explicitamente que a administracao do site pode ver a foto.
+ * Existe um painel em /secret/adm exatamente para isso, e "armazenada" sozinho
+ * nao descreve isso para quem esta mandando uma foto intima.
  */
 export function ConsentNotice({ checked, onChange }) {
   return (
@@ -11,7 +15,9 @@ export function ConsentNotice({ checked, onChange }) {
         <span className="font-medium text-steel-200">Antes de enviar:</span> a imagem que você
         escolher é enviada para o nosso servidor e fica <strong>armazenada</strong> junto com o
         gênero, a parte do corpo e o estilo selecionados. Nada é processado localmente no seu
-        navegador. Se não quiser que a foto seja guardada, não envie o formulário.
+        navegador. A administração do site{' '}
+        <strong>pode visualizar as fotos enviadas</strong>. Se não quiser que a foto seja guardada
+        e vista, não envie o formulário.
       </p>
 
       <label className="flex cursor-pointer items-start gap-3 text-sm text-steel-200">
@@ -23,8 +29,8 @@ export function ConsentNotice({ checked, onChange }) {
           className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-accent-500)]"
         />
         <span>
-          Tenho 18 anos ou mais, a imagem é minha e entendo que ela será enviada e armazenada no
-          servidor.
+          Tenho 18 anos ou mais, a imagem é minha e entendo que ela será enviada, armazenada no
+          servidor e poderá ser vista pela administração do site.
         </span>
       </label>
     </div>

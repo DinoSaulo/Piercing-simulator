@@ -144,3 +144,10 @@ vite.config.ts.timestamp-*
 
 # Lockfile de skills gerado pelo install do @supabase/supabase-js
 skills-lock.json
+
+# Vercel
+.vercel
+
+# Supabase CLI (o link do projeto e o estado local do `supabase start`)
+supabase/.temp/
+supabase/.branches/

@@ -1,0 +1,13 @@
+# Configuração do Supabase CLI.
+#
+#   npx supabase link --project-ref <ref>
+#   npx supabase functions deploy api
+#
+project_id = "yjqmlzqkdtossfxopvtw"
+
+[functions.api]
+# O formulário público não tem usuário autenticado no Supabase, então o gateway
+# de Edge Functions não pode exigir um JWT da plataforma — ele rejeitaria a
+# requisição antes de chegar no nosso código. A proteção de /api/admin/* é feita
+# dentro da função, com o cookie de sessão do painel.
+verify_jwt = false
