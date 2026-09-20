@@ -1,0 +1,9 @@
+{
+  "name": "piercing-simulator",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "dev": "cd frontend && npm run dev"
+  }
+}
