@@ -47,18 +47,17 @@ describe('AgeGateModal', () => {
 })
 
 describe('ConsentNotice', () => {
-  it('diz que a imagem sai do dispositivo e fica armazenada', () => {
+  it('diz que a imagem sera enviada e armazenada no servidor', () => {
     render(<ConsentNotice checked={false} onChange={vi.fn()} />)
 
-    expect(screen.getByText(/enviada para o nosso servidor/)).toBeInTheDocument()
-    expect(screen.getByText(/Nada é processado localmente/)).toBeInTheDocument()
+    expect(screen.getByText(/será enviada, armazenada no/)).toBeInTheDocument()
   })
 
   it('avisa explicitamente que a administracao ve as fotos', () => {
     // "armazenada" sozinho nao descreve isso para quem manda uma foto intima.
     render(<ConsentNotice checked={false} onChange={vi.fn()} />)
 
-    expect(screen.getByText(/pode visualizar as fotos enviadas/)).toBeInTheDocument()
+    expect(screen.getByText(/poderá ser vista pela administração do site/)).toBeInTheDocument()
   })
 
   it('o aceite e obrigatorio e reflete o estado recebido', () => {

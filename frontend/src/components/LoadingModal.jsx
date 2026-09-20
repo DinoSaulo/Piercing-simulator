@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const LOADING_DURATION_MS = 4000
+export const LOADING_DURATION_MS = 90000
 
 const STEPS = [
   { at: 0, label: 'Analisando a imagem…' },

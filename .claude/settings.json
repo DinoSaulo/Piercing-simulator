@@ -13,7 +13,9 @@
       "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/storage_test.ts)",
       "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/handler_test.ts)",
       "Bash(npx --yes deno@2 test --node-modules-dir=none --allow-env --allow-read --allow-net --env-file=supabase/functions/_tests/.env.test supabase/functions/_tests/routes_simulate_test.ts)",
-      "Bash(cd \"C:/Users/saulo/projects/Piercing-simulator\" && rm -f nul && git add -A && git status)"
+      "Bash(cd \"C:/Users/saulo/projects/Piercing-simulator\" && rm -f nul && git add -A && git status)",
+      "Bash(git commit -m ' *)",
+      "mcp__plugin_context-mode_context-mode__ctx_execute"
     ],
     "additionalDirectories": [
       "C:\\Users\\saulo\\projects\\Piercing-simulator"
